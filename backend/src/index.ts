@@ -3,8 +3,14 @@ import { User } from "./models/User.model";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import {main} from "./db"
+import jwt from "jsonwebtoken"
+import * as dotenv from "dotenv"
+dotenv.config();
 const app = express();
-// app.use(express.urlencoded({ extended: true }));
+
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
 app.use(express.json());
 const UserValidation = z.object({
   username: z.string().min(3).max(10),
@@ -61,7 +67,7 @@ app.post("/api/v1/signup", async (req, res) => {
       });
       return;
     }
-    //hash password
+    //password hashing
     let salt = bcrypt.genSaltSync(10);
     let hashedPassword = bcrypt.hashSync(password, salt);
     //DB insertion.
@@ -84,7 +90,42 @@ app.post("/api/v1/signup", async (req, res) => {
   }
 });
 
-app.post("/api/v1/signin", (req, res) => {});
+app.post("/api/v1/signin", async(req, res) => {
+    const {username, password} = req.body;
+    
+    
+    
+    //DB checking
+    const userExists = await User.findOne({username:username});
+    
+    
+    
+
+    if(userExists && userExists.password && bcrypt.compareSync(password, userExists.password)){
+        if(!JWT_SECRET){
+            console.log("JWT_SECRET is not set!")
+            res.status(500).json({
+                message:"Internal Server Error"
+            })
+            return;
+        }
+        //jwt token creation
+        const payload =  {id: userExists._id};
+        const token = jwt.sign(payload, JWT_SECRET)
+        
+        //send back token.
+        res.status(200).json({
+            message:"logged in", 
+            token: token
+        });
+        return;
+    }
+    else{
+        res.status(403).json({
+            message:"Wrong username or password", 
+        })
+    }
+});
 
 app.post("/api/v1/addContent", (req, res) => {});
 
