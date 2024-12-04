@@ -1,13 +1,22 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import { User } from "./models/User.model";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import {main} from "./db"
 import jwt from "jsonwebtoken"
 import * as dotenv from "dotenv"
+import { rateLimit } from 'express-rate-limit'
+
 dotenv.config();
 const app = express();
 
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, 
+	limit: 100,
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Redis, Memcached, etc. See below.
+})
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -90,7 +99,7 @@ app.post("/api/v1/signup", async (req, res) => {
   }
 });
 
-app.post("/api/v1/signin", async(req, res) => {
+app.post("/api/v1/signin",limiter, async(req, res) => {
     const {username, password}:SignUpType = req.body;
     
     
