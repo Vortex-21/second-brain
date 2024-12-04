@@ -6,7 +6,7 @@ import {main} from "./db"
 import jwt from "jsonwebtoken"
 import * as dotenv from "dotenv"
 import { rateLimit } from 'express-rate-limit'
-
+import { authenticate } from "./middleware";
 dotenv.config();
 const app = express();
 
@@ -58,7 +58,6 @@ app.post("/api/v1/signup", async (req, res) => {
     //checking for exisiting users for same username.
     const existing = await User.findOne({
       username: username,
-      password: password,
     });
     if (existing) {
       res.status(403).json({
@@ -136,7 +135,12 @@ app.post("/api/v1/signin",limiter, async(req, res) => {
     }
 });
 
-app.post("/api/v1/addContent", (req, res) => {});
+app.post("/api/v1/addContent",authenticate, (req, res) => {
+  res.json({
+    message : "This is addContent route!"
+  })
+  return;
+});
 
 app.get("/home", (req, res) => {
   console.log("hit home !");
