@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken"
 import * as dotenv from "dotenv"
 import { rateLimit } from 'express-rate-limit'
 import { authenticate } from "./middleware";
+import { isTemplateLiteralTypeNode } from "typescript";
 dotenv.config();
 const app = express();
 
@@ -135,10 +136,18 @@ app.post("/api/v1/signin",limiter, async(req, res) => {
     }
 });
 
-app.post("/api/v1/addContent",authenticate, (req, res) => {
-  res.json({
-    message : "This is addContent route!"
-  })
+app.post("/api/v1/content",authenticate, (req, res) => {
+  const {title, link, tags, userId} = req.body;
+  try{
+
+  }
+  catch(err){
+    console.log("Error at Add content Page: ", err);
+    res.status(500).json({
+
+    })
+  }
+  
   return;
 });
 
@@ -148,6 +157,11 @@ app.get("/home", (req, res) => {
     message: "This is home route!",
   });
 });
+
+app.all("*", (req,res)=>{
+  res.status(404).json({message : "Page Not Found!"})
+  return;
+})
 
 app.listen(port, async() => {
   await main();

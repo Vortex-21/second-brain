@@ -20,6 +20,7 @@ export function authenticate(req:Request, res:Response, next:NextFunction){
             return;
         }
         const result = jwt.verify(token, JWT_SECRET);
+        // req.userId = result.id;
         console.log("result : ",result);
         next();
 
