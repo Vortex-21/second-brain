@@ -7,9 +7,19 @@ import jwt from "jsonwebtoken"
 import * as dotenv from "dotenv"
 import { rateLimit } from 'express-rate-limit'
 import { authenticate } from "./middleware";
-import { isTemplateLiteralTypeNode } from "typescript";
+import { Content } from "./models/Content.model";
+// import "./types/express"
 dotenv.config();
 const app = express();
+
+// declare global{
+//   namespace Express{
+//     interface Request{
+//       userId?:string; 
+//     }
+//   }
+// }
+
 
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 1000, 
@@ -136,20 +146,42 @@ app.post("/api/v1/signin",limiter, async(req, res) => {
     }
 });
 
-app.post("/api/v1/content",authenticate, (req, res) => {
-  const {title, link, tags, userId} = req.body;
+app.post("/api/v1/content",authenticate, async (req, res) => {
+  const {title, link="", tags=[]} = req.body;
   try{
-
-  }
-  catch(err){
-    console.log("Error at Add content Page: ", err);
-    res.status(500).json({
-
+    await Content.create({
+      title, 
+      link, 
+      tags, 
+      userId: req.userId
+    });
+    res.status(200).json({
+      message : "New Content add to your brain!"
     })
   }
-  
-  return;
+  catch(err){
+    console.log("Error at add content : ", err);
+    res.status(500).json({
+      message : "Internal Server Error."
+    })
+  }  
+
 });
+
+app.get("/api/v1/content", authenticate, async(req,res)=>{
+  const userId = req.userId;
+  try
+  {const content = await Content.find({userId: userId}).populate("userId", "username");
+  res.json({
+    "Content": content
+  });}
+  catch(err){
+    console.log("Error at get Content : ", err);
+    res.status(500).json({
+      message : "Internal Server Error"
+    })
+  }
+})
 
 app.get("/home", (req, res) => {
   console.log("hit home !");

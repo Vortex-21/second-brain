@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+import jwt, { Jwt } from "jsonwebtoken"
 import {Request, Response, NextFunction} from "express"
 const JWT_SECRET = process.env.JWT_SECRET;
 export function authenticate(req:Request, res:Response, next:NextFunction){
@@ -20,9 +20,18 @@ export function authenticate(req:Request, res:Response, next:NextFunction){
             return;
         }
         const result = jwt.verify(token, JWT_SECRET);
-        // req.userId = result.id;
-        console.log("result : ",result);
-        next();
+        if(typeof(result)==='object' && "id" in result){
+            req.userId = result.id;
+
+            next();
+        }
+        else{
+            res.status(403).json({
+                message : "Invalid or expired token."
+            })
+        }
+        
+        
 
     }
     catch(err){
