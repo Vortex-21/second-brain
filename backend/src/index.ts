@@ -10,7 +10,7 @@ import { authenticate } from "./middleware";
 import { Content } from "./models/Content.model";
 import crypto from "crypto";
 import { ShareableLinkModel } from "./models/ShareableLinks.model";
-import { isTemplateLiteralTypeNode, NewLineKind } from "typescript";
+
 // import "./types/express"
 dotenv.config();
 const app = express();
@@ -252,6 +252,24 @@ app.get("/api/v1/brain/:token", async (req,res) => {
     res.status(500).json({
       message : "Internal Server Error!"
     });
+  }
+});
+
+app.post("/api/v1/brain/revoke", authenticate, async(req,res)=>{
+  const userId = req.userId;
+  try{
+    await ShareableLinkModel.deleteMany({userId:userId});
+    res.status(200).json({
+      message:"All Shares revoked successfully!"
+    });
+    return;
+  }
+  catch(err){
+    console.log("Error at revoke sharing route : ", err);
+    res.status(500).json({
+      message:"Internal Server Error"
+    });
+    return;
   }
 });
 
