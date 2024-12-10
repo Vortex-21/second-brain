@@ -9,7 +9,7 @@ import { rateLimit } from "express-rate-limit";
 import { authenticate } from "./middleware";
 import { Content } from "./models/Content.model";
 import crypto from "crypto";
-import { ShareableLinkModel } from "./models/ShareableLinks.mode";
+import { ShareableLinkModel } from "./models/ShareableLinks.model";
 import { isTemplateLiteralTypeNode, NewLineKind } from "typescript";
 // import "./types/express"
 dotenv.config();
@@ -253,7 +253,7 @@ app.get("/api/v1/brain/:token", async (req,res) => {
       message : "Internal Server Error!"
     });
   }
-})
+});
 
 app.get("/home", (req, res) => {
   console.log("hit home !");
