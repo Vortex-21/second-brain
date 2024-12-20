@@ -1,5 +1,9 @@
 import './index.css'
 import './App.css'
+import { Button } from './components/Button'
+import { ShareIcon } from './icons/ShareIcon'
+import {PlusIcon} from './icons/PlusIcon'
+import { Card } from './components/Card'
 
 function App(){
   return (
@@ -11,15 +15,21 @@ function App(){
 
 function Brain(){
     return (
-      <div className="flex  w-screen">
-        <SideBar></SideBar>
+      <div className="flex  w-screen bg-[#F9FBFC]">
+        {/* <SideBar></SideBar>
         <ContentScreen></ContentScreen>
-      
+       */}
+       {/* <Button variant="primary" text="Add Content" startIcon={<PlusIcon/>}></Button>
+       <Button variant="secondary" text="Share Brain" startIcon={<ShareIcon/>}></Button> */}
+    
+    <Card type="Video" title="Rodan vs Jets" description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!" tags={["Action", "Legendary", "Monsters"]} link="https://www.youtube.com/watch?v=KExBIzm1xQo"/>
+
+    <Card type="Tweet" title="Rodan vs Jets" description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!" tags={["Action", "Legendary", "Monsters"]} link="https://twitter.com/username/status/1869311029131596262"/>
       </div>
     )
 }
 
-function SideBar(){
+/*function SideBar(){
   return(
     <div className="bg-white  w-96 border-r-gray-200 border-r-2">
       <h1 className="text-4xl mt-4 ml-2 mr-2"><i className="fa-solid fa-brain"></i> No Brainer</h1>
@@ -81,5 +91,5 @@ function Card(){
     </div>
   )
 }
-/**/
+*/
 export default App
