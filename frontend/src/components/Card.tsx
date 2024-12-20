@@ -1,4 +1,8 @@
+import DocumentIcon from "../icons/DocumentIcon";
 import { ShareIcon } from "../icons/ShareIcon";
+import TrashIcon from "../icons/TrashIcon";
+import TweetIcon from "../icons/TweetIcon";
+import VideoIcon from "../icons/VideoIcon";
 import Tag from "./Tag";
 
 interface CardInterface {
@@ -25,12 +29,14 @@ export function Card({
       
       <div className="flex justify-between m-2">
         <div className="flex">
-          <ShareIcon />
+          {type=="Video" && <VideoIcon />}
+          {type=="Tweet" && <TweetIcon />}
+          {type=="Document" && <DocumentIcon />}
           <span className="ml-2 font-semibold">{title}</span>
         </div>
-        <div className="flex">
+        <div className="flex w-12 justify-between">
           <ShareIcon />
-          <ShareIcon />
+          <TrashIcon />
         </div>
       </div>
       <div className="mt-4">{description}</div>

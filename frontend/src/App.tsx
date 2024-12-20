@@ -25,6 +25,8 @@ function Brain(){
     <Card type="Video" title="Rodan vs Jets" description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!" tags={["Action", "Legendary", "Monsters"]} link="https://www.youtube.com/watch?v=KExBIzm1xQo"/>
 
     <Card type="Tweet" title="Rodan vs Jets" description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!" tags={["Action", "Legendary", "Monsters"]} link="https://twitter.com/username/status/1869311029131596262"/>
+
+    <Card type="Document" title="Rodan vs Jets" description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!" tags={["Action", "Legendary", "Monsters"]} link="https://twitter.com/username/status/1869311029131596262"/>
       </div>
     )
 }
