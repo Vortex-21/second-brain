@@ -1,21 +1,32 @@
 import { ReactElement } from "react";
 
-interface ButtonProps{
-    variant:"primary" | "secondary", 
-    text:string, 
-    startIcon:ReactElement
+interface ButtonProps {
+  variant: "primary" | "secondary";
+  text: string;
+  startIcon?: ReactElement;
+  clickHandler: Function;
 }
-const variantClasses= {
-    "primary": "mr-2  bg-[#5046E4] text-white", 
-    "secondary":"mr-4   bg-[#E1E6FF] text-[#5d59e0]"
-}
-const defaultStyles="text-1xl p-4 rounded-lg flex items-center";
+const variantClasses = {
+  primary: " bg-[#5046E4] text-white",
+  secondary: "   bg-[#E1E6FF] text-[#5d59e0]",
+};
+const defaultStyles = "text-lg px-4 py-3 rounded-2xl flex items-center cursor-pointer";
 
-export function Button({variant, text, startIcon}: ButtonProps){
-    return (
-        <div className={variantClasses[variant] + " " + defaultStyles}>
-            {startIcon}
-            {text}
-        </div>
-    )
+export function Button({
+  variant,
+  text,
+  startIcon,
+  clickHandler,
+}: ButtonProps) {
+  return (
+    <div
+      className={variantClasses[variant] + " " + defaultStyles}
+      onClick={() => {
+        clickHandler()
+      }}
+    >
+      {startIcon && <span className="mr-2">{startIcon}</span>}
+      {text}
+    </div>
+  );
 }
