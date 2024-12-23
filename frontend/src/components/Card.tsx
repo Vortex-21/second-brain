@@ -30,7 +30,7 @@ export function Card({
     tweetLink += "https://twitter.com/username/status/" + link.split("status/")[1];
   }
   return (
-    <div className=" m-4  p-4 rounded-lg  min-w-64s max-w-72 min-h-60 max-h-96 scrollbar-none overflow-y-scroll border-gray-100 border-2 flex flex-col justify-between bg-[#FFFFFF]">
+    <div className="hover:shadow-xl transition-all duration-300 m-4  p-4 rounded-lg  min-w-64s max-w-72 min-h-60 max-h-96 scrollbar-none overflow-y-scroll border-gray-100 border-2 flex flex-col justify-between bg-[#FFFFFF]">
       
       <div className="flex justify-between m-2">
         <div className="flex">
@@ -56,8 +56,8 @@ export function Card({
       </div>
 
       <div className="my-2 flex flex-wrap">
-        {tags.map((el: string) => {
-          return <Tag el={el} />;
+        {tags.map((el: string, idx:number) => {
+          return <Tag key={idx} el={el} />;
         })}
       </div>
     </div>

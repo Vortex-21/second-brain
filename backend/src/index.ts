@@ -10,10 +10,18 @@ import { authenticate } from "./middleware";
 import { Content } from "./models/Content.model";
 import crypto from "crypto";
 import { ShareableLinkModel } from "./models/ShareableLinks.model";
+import cors from "cors"
+
 
 // import "./types/express"
 dotenv.config();
 const app = express();
+app.use(cors(
+  {
+    origin: "http://localhost:5173", 
+    credentials: true
+  }
+))
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -77,9 +85,10 @@ app.post("/api/v1/signup", async (req, res) => {
       password: password,
     });
     if (!validationResult.success) {
-      console.log("Signup Zod Validation error: ", validationResult.error);
+      console.log("Signup Zod Validation error: ", validationResult.error.errors);
+
       res.status(411).json({
-        message: validationResult.error,
+        message: validationResult.error.errors
       });
       return;
     }
@@ -124,11 +133,11 @@ app.post("/api/v1/signin", limiter, async (req, res) => {
     //jwt token creation
     const payload = { id: userExists._id };
     const token = jwt.sign(payload, JWT_SECRET);
-
+    res.cookie("token", token, {maxAge: 7*24*60*60*1000}); 
     //send back token.
     res.status(200).json({
       message: "logged in",
-      token: token,
+      // token: token,
     });
     return;
   } else {

@@ -8,7 +8,7 @@ interface ButtonProps {
 }
 const variantClasses = {
   primary: " bg-[#5046E4] text-white",
-  secondary: "   bg-[#E1E6FF] text-[#5d59e0]",
+  secondary: " bg-[#E1E6FF] text-[#5d59e0]",
 };
 const defaultStyles = "text-lg px-4 py-3 rounded-2xl flex items-center cursor-pointer";
 
@@ -21,8 +21,8 @@ export function Button({
   return (
     <div
       className={variantClasses[variant] + " " + defaultStyles}
-      onClick={() => {
-        clickHandler()
+      onClick={(e) => {
+        clickHandler(e)
       }}
     >
       {startIcon && <span className="mr-2">{startIcon}</span>}
