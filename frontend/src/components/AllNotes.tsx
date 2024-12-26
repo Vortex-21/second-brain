@@ -2,10 +2,21 @@ import { Button } from "./Button";
 import { Card } from "./Card";
 import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { ModalAtom } from "../recoil/atoms/ModalAtom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { AuthAtom } from "../recoil/atoms/AuthAtoms";
+import { useEffect } from "react";
 export const AllNotes = () => {
   const setModalStatus = useSetRecoilState(ModalAtom);
+  const AuthStatus = useRecoilValue(AuthAtom);
+  const setAuthStatus = useSetRecoilState(AuthAtom);
+  useEffect(()=>{
+    if(document.cookie){
+      setAuthStatus(true);
+    }
+  },[])
   function addContent() {
     setModalStatus("Add");
   }
@@ -13,7 +24,35 @@ export const AllNotes = () => {
   function shareBrain() {
     setModalStatus("ShareBrain");
   }
+  
+  async function fetchData(){
+    try {
+      const response = await axios.get(`http://localhost:3000/api/v1/content`, {withCredentials: true});
+      return response.data;
+    } catch (error: any) {
+      console.error(error.message);
+      return null;
+    }
+  }
+  const {data , isLoading, error} = useQuery({queryKey: ["content"], queryFn: fetchData})
+  if(isLoading){
+    return (
+      <div>
+        <h1>Loading your Content.....</h1>
+      </div>
+    )
+  }
+  if(error){
+    console.log("error: ",error);
+    return (
+      <div>
+        <h1>Error loading your Content. Please try again later.</h1>
+      </div>
+    )
+  }
+  // console.log("Content: ", data.content)
   return (
+    AuthStatus ? 
     <div className="">
       <div className="sticky top-0 bg-[#F9FBFC] p-2">
       <div className="flex  items-center h-20">
@@ -38,96 +77,15 @@ export const AllNotes = () => {
       </div>
 
       <div id="cards" className="flex flex-wrap mt-8 gap-5 ">
-        <Card
-          content_type="Video"
-          title="Rodan vs Jets"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://www.youtube.com/watch?v=KExBIzm1xQo"
-        />
-
-        <Card
-          content_type="Tweet"
-          title="Rodan vs Jets"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://twitter.com/username/status/1869311029131596262"
-        />
-
-        <Card
-          content_type="Document"
-          title="Rodan vs Jets"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://twitter.com/username/status/1869311029131596262"
-        />
-
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
-        <Card
-          content_type="Tweet"
-          title="Twitter post"
-          description="In Godzilla: King of Monsters, Rodan a flying fiery titan, is destroying the jets which were sent to fight Monster-0 otherwise known as King Ghidora!"
-          tags={["Action", "Legendary", "Monsters"]}
-          link="https://x.com/elonmusk/status/1869865296376303763"
-        />
+        {
+        data? data.content? data.content.map((el:Object)=>{
+          <Card content_type="Document" title="Demo" description="This is a demo card." ></Card>
+        }):<p>No Content to load</p>:<p>You are not Logged in!</p>
+       }
       </div>
+    </div>:<div>
+      Sign Up and see the magic begin!
+      Or what are you waiting for? Log in!
     </div>
   );
 };

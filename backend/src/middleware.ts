@@ -1,9 +1,13 @@
 import jwt, { Jwt } from "jsonwebtoken"
 import {Request, Response, NextFunction} from "express"
 const JWT_SECRET = process.env.JWT_SECRET;
+
 export function authenticate(req:Request, res:Response, next:NextFunction){
     
-    const token = req.headers.authorization;
+    // const token = req.headers.authorization;
+    console.log(req.cookies)
+    const token = req.cookies["token"];
+    // console.log("token: ", token);
     if(!token || typeof token !== 'string'){
         res.status(401).json({
             "message": "Please log in first."

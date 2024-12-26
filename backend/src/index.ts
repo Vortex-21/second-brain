@@ -10,6 +10,7 @@ import { authenticate } from "./middleware";
 import { Content } from "./models/Content.model";
 import crypto from "crypto";
 import { ShareableLinkModel } from "./models/ShareableLinks.model";
+import cookieParser from "cookie-parser"
 import cors from "cors"
 
 
@@ -22,7 +23,7 @@ app.use(cors(
     credentials: true
   }
 ))
-
+app.use(cookieParser())
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
@@ -146,6 +147,14 @@ app.post("/api/v1/signin", limiter, async (req, res) => {
     });
   }
 });
+
+app.get("/api/v1/signout", authenticate, async (req,res)=>{
+  res.clearCookie("token");
+  res.json({
+    message:"Logged out!"
+  })
+
+})
 
 app.post("/api/v1/content", authenticate, async (req, res) => {
   const { title, link = "", tags = [] } = req.body;

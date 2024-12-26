@@ -9,8 +9,8 @@ interface CardInterface {
   content_type: string;
   title: string;
   description: string;
-  tags: string[];
-  link: string;
+  tags?: string[];
+  link?: string;
 }
 
 
@@ -23,10 +23,10 @@ export function Card({
 }: CardInterface) {
   let vidLink="https://www.youtube.com/embed/";
   let tweetLink="https://twitter.com/username/status/";
-  if(content_type == "Video"){
+  if(content_type == "Video" && link){
     vidLink += link.split("?v=")[1];
   }
-  if(content_type == "Tweet"){
+  if(content_type == "Tweet" && link){
     tweetLink += "https://twitter.com/username/status/" + link.split("status/")[1];
   }
   return (
@@ -56,7 +56,7 @@ export function Card({
       </div>
 
       <div className="my-2 flex flex-wrap">
-        {tags.map((el: string, idx:number) => {
+        {tags && tags.map((el: string, idx:number) => {
           return <Tag key={idx} el={el} />;
         })}
       </div>
