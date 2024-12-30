@@ -157,9 +157,11 @@ app.get("/api/v1/signout", authenticate, async (req,res)=>{
 })
 
 app.post("/api/v1/content", authenticate, async (req, res) => {
-  const { title, link = "", tags = [] } = req.body;
+  const {content_type, title, description, link = "", tags = [] } = req.body;
   try {
     await Content.create({
+      content_type,
+      description,
       title,
       link,
       tags,

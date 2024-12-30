@@ -21,16 +21,12 @@ export function Card({
   tags ,
   link
 }: CardInterface) {
-  let vidLink="https://www.youtube.com/embed/";
-  let tweetLink="https://twitter.com/username/status/";
-  if(content_type == "Video" && link){
-    vidLink += link.split("?v=")[1];
-  }
-  if(content_type == "Tweet" && link){
-    tweetLink += "https://twitter.com/username/status/" + link.split("status/")[1];
-  }
+  let vidLink=`https://www.youtube.com/embed/${link?.split("?v=")[1]}`;
+  let tweetLink=`https://twitter.com/username/status/${link?.split("status/")[1]}`;
+
+  console.log(`raw url: ${link} tweetLink: ${tweetLink} id: ${link?.split("status/")[1]}`);
   return (
-    <div className="hover:shadow-xl transition-all duration-300 m-4  p-4 rounded-lg  min-w-64s max-w-72 min-h-60 max-h-96 scrollbar-none overflow-y-scroll border-gray-100 border-2 flex flex-col justify-between bg-[#FFFFFF]">
+    <div className="hover:shadow-xl transition-all duration-300 m-4  p-4 rounded-lg  min-w-64 max-w-72 min-h-60 max-h-96 scrollbar-none overflow-y-scroll border-gray-100 border-2 flex flex-col justify-between bg-[#FFFFFF]">
       
       <div className="flex justify-between m-2">
         <div className="flex">

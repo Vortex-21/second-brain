@@ -8,6 +8,14 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { AuthAtom } from "../recoil/atoms/AuthAtoms";
 import { useEffect } from "react";
+interface contentInterface {
+  content_type: "Document" | "Video" | "Tweet", 
+  title: string, 
+  link?:string, 
+  description:string,
+  tags?:string[], 
+  userId:string
+}
 export const AllNotes = () => {
   const setModalStatus = useSetRecoilState(ModalAtom);
   const AuthStatus = useRecoilValue(AuthAtom);
@@ -34,7 +42,7 @@ export const AllNotes = () => {
       return null;
     }
   }
-  const {data , isLoading, error} = useQuery({queryKey: ["content"], queryFn: fetchData})
+  const {data, isLoading, error} = useQuery({queryKey: ["content"], queryFn: fetchData})
   if(isLoading){
     return (
       <div>
@@ -50,42 +58,45 @@ export const AllNotes = () => {
       </div>
     )
   }
-  // console.log("Content: ", data.content)
-  return (
-    AuthStatus ? 
-    <div className="">
-      <div className="sticky top-0 bg-[#F9FBFC] p-2">
-      <div className="flex  items-center h-20">
-        <h1 className="text-4xl">All Notes</h1>
-
-        <div id="buttons" className="ml-auto text-2xl flex gap-5">
-          <Button
-            variant="primary"
-            text="Add Content"
-            startIcon={<PlusIcon />}
-            clickHandler={addContent}
-          ></Button>
-          <Button
-            variant="secondary"
-            text="Share Brain"
-            startIcon={<ShareIcon />}
-            clickHandler={shareBrain}
-          ></Button>
+  else{
+    console.log("data: ", data);
+    return (
+      AuthStatus ? 
+      <div className="">
+        <div className="sticky top-0 bg-[#F9FBFC] p-2">
+        <div className="flex  items-center h-20">
+          <h1 className="text-4xl">All Notes</h1>
+  
+          <div id="buttons" className="ml-auto text-2xl flex gap-5">
+            <Button
+              variant="primary"
+              text="Add Content"
+              startIcon={<PlusIcon />}
+              clickHandler={addContent}
+            ></Button>
+            <Button
+              variant="secondary"
+              text="Share Brain"
+              startIcon={<ShareIcon />}
+              clickHandler={shareBrain}
+            ></Button>
+          </div>
         </div>
+  
+        </div>
+  
+        <div id="cards" className="flex flex-wrap mt-8 gap-5 ">
+          {
+          data? data.Content.length>0? data.Content.map((el:contentInterface, idx: number)=>{
+            return <Card key = {idx} content_type={el.content_type} title={el.title} description={el.description} tags={el.tags} link={el.link}></Card>
+          }):<p>No Content to load</p>:<p>You are not Logged in!</p>
+         }
+        </div>
+      </div>:<div>
+        Sign Up and see the magic begin!
+        Or what are you waiting for? Log in!
       </div>
+    );
 
-      </div>
-
-      <div id="cards" className="flex flex-wrap mt-8 gap-5 ">
-        {
-        data? data.content? data.content.map((el:Object)=>{
-          <Card content_type="Document" title="Demo" description="This is a demo card." ></Card>
-        }):<p>No Content to load</p>:<p>You are not Logged in!</p>
-       }
-      </div>
-    </div>:<div>
-      Sign Up and see the magic begin!
-      Or what are you waiting for? Log in!
-    </div>
-  );
+  }
 };
