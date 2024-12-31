@@ -1,5 +1,7 @@
 import { atom } from 'recoil'
-export const ModalAtom = atom({
+import { ModalTypes } from '../../ModalTypes'
+
+export const ModalAtom = atom<ModalTypes>({
     key:"modalState", 
     default:"None"
 })

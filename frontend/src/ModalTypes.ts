@@ -1,0 +1,1 @@
+export type ModalTypes = "Add"|"ShareBrain"|"Signup"|"Signin"|"Loader"|"None"

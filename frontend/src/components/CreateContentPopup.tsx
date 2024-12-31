@@ -3,6 +3,10 @@ import { Button } from "./Button";
 import { Input } from "./Input";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useSetRecoilState } from "recoil";
+import { ModalAtom } from "../recoil/atoms/ModalAtom";
+import {Loader} from "../icons/Loader";
+import {LoaderModal} from "./LoaderModal";
 interface contentInterface {
   content_type: "Document" | "Video" | "Tweet", 
   title: string, 
@@ -16,22 +20,27 @@ const CreateContentPopup = () => {
   const linkRef = useRef<HTMLInputElement>(null); 
   const typeRef = useRef<HTMLInputElement>(null); 
   const descriptionRef = useRef<HTMLTextAreaElement>(null); 
-  
+  const setModalStatus = useSetRecoilState(ModalAtom); 
   async function addContent(data:contentInterface){
     const response = await axios.post("http://localhost:3000/api/v1/content", data, {withCredentials:true});
     return response.data;
   }
 
   const mutation = useMutation({mutationFn: addContent, 
+    
     onSuccess: ()=>{
       console.log("Content added to brain!")
       queryClient.invalidateQueries({queryKey: ["content"]});  
+      setModalStatus("None");
     }, 
+
     onError:(err: any)=>{
       console.log("Error at adding content : ", err);
       alert("Error adding content. Please try again later.")
     }
   })
+  
+  
 
 
   async function onClickHandler(){
@@ -58,14 +67,17 @@ const CreateContentPopup = () => {
   }
   
   return (
-    <div className="fixed bg-white top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] border-2 h-96 w-80 rounded-lg z-40 flex flex-col items-center justify-center">
+    mutation.isPending?<LoaderModal/>:<div className="fixed bg-white top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] border-2 min-h-96 w-80 rounded-lg z-40 flex flex-col items-center justify-center">
+      {<form className="flex flex-col items-center gap-2">
       <Input ref = {typeRef} placeholder="Content Type" required={true}/>
       <Input ref = {titleRef} placeholder="Title" required={true}/>
       <Input ref = {linkRef} placeholder="Link"/>
       {/* <Input ref = {linkRef} placeholder="Description"/> */}
-      <textarea name="" id="" placeholder="Description" ref={descriptionRef} className="w-3/5 border-2 border-slate-300 rounded-md"></textarea>
+      <textarea name="" id="" placeholder="Description" ref={descriptionRef} className="px-4  w-3/5 border-2 border-slate-300 rounded-md"></textarea>
       {/* <Input ref = {linkRef} placeholder="Link"/> */}
       <Button variant="secondary" text = "Submit" clickHandler={onClickHandler}></Button>
+
+      </form>}
     </div>
   );
 };

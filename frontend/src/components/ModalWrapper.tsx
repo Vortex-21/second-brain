@@ -6,17 +6,24 @@ import CreateContentPopup from './CreateContentPopup';
 import ShareBrainPopup from './ShareBrainPopup';
 import SignupPopup from './SignupPopup';
 import SigninPopup from './SigninPopup';
+import { ModalTypes } from '../ModalTypes';
+import {LoaderModal} from './LoaderModal';
 
+const popup: {[key in  ModalTypes]: JSX.Element|null} = {
+  "Add":<CreateContentPopup/>, 
+  "ShareBrain":<ShareBrainPopup/>, 
+  "Signup":<SignupPopup/>, 
+  "Signin":<SigninPopup/>,
+  "None":null,
+  "Loader":<LoaderModal/> 
+}
 export const ModalWrapper = () => {
-  const modalStatus = useRecoilValue(ModalAtom);
+  const modalStatus: ModalTypes = useRecoilValue(ModalAtom);
   if(modalStatus === "None")return null;
   return (
     <>
         <Overlay/>
-        {modalStatus === "Add" && <CreateContentPopup/>}
-        {modalStatus === "ShareBrain" && <ShareBrainPopup/>}
-        {modalStatus === "Signup" && <SignupPopup/>}
-        {modalStatus === "Signin" && <SigninPopup/>}
+        {popup[modalStatus]}
     </>
   )
 }

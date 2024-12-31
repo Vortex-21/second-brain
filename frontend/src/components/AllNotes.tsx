@@ -14,7 +14,8 @@ interface contentInterface {
   link?:string, 
   description:string,
   tags?:string[], 
-  userId:string
+  userId:string, 
+  _id: string
 }
 export const AllNotes = () => {
   const setModalStatus = useSetRecoilState(ModalAtom);
@@ -88,7 +89,7 @@ export const AllNotes = () => {
         <div id="cards" className="flex flex-wrap mt-8 gap-5 ">
           {
           data? data.Content.length>0? data.Content.map((el:contentInterface, idx: number)=>{
-            return <Card key = {idx} content_type={el.content_type} title={el.title} description={el.description} tags={el.tags} link={el.link}></Card>
+            return <Card id={el._id} key = {el._id} content_type={el.content_type} title={el.title} description={el.description} tags={el.tags} link={el.link}></Card>
           }):<p>No Content to load</p>:<p>You are not Logged in!</p>
          }
         </div>

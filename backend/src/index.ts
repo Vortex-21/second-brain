@@ -196,8 +196,8 @@ app.get("/api/v1/content", authenticate, async (req, res) => {
   }
 });
 
-app.delete("/api/v1/content", authenticate, async (req, res) => {
-  const { contentId } = req.body;
+app.delete("/api/v1/content/:contentId", authenticate, async (req, res) => {
+  const { contentId } = req.params;
   try {
     const deletedContent = await Content.findOneAndDelete({
       _id: contentId,
