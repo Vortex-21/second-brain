@@ -77,7 +77,7 @@ export function Card({
   } )
 
   return (
-    <div className="hover:shadow-xl transition-all duration-300 m-4  p-4 rounded-lg  w-72 min-h-60 max-h-96 scrollbar-none overflow-y-scroll border-gray-100 border-2 flex flex-col justify-between bg-[#FFFFFF]">
+    <div className="hover:shadow-xl transition-all duration-300 m-4  p-4 rounded-lg  w-72 h-96 scrollbar-none overflow-y-scroll border-gray-100 border-2 flex flex-col justify-between bg-[#FFFFFF]">
       
       <div className="flex justify-between m-2 bg-white">
         <div className="flex">

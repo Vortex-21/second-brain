@@ -7,6 +7,7 @@ import { useSetRecoilState } from "recoil";
 import { ModalAtom } from "../recoil/atoms/ModalAtom";
 import {Loader} from "../icons/Loader";
 import {LoaderModal} from "./LoaderModal";
+import { ToastContainer, toast } from 'react-toastify';
 interface contentInterface {
   content_type: "Document" | "Video" | "Tweet", 
   title: string, 
@@ -15,6 +16,11 @@ interface contentInterface {
   tags?:string[], 
 }
 const CreateContentPopup = () => {
+  const notify =  ()=>{
+    toast.success('Content Added Successfully!', {
+      position: 'bottom-left',
+    });
+  };
   const queryClient = useQueryClient();
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null); 
@@ -25,15 +31,16 @@ const CreateContentPopup = () => {
     const response = await axios.post("http://localhost:3000/api/v1/content", data, {withCredentials:true});
     return response.data;
   }
-
+  
   const mutation = useMutation({mutationFn: addContent, 
     
     onSuccess: ()=>{
       console.log("Content added to brain!")
       queryClient.invalidateQueries({queryKey: ["content"]});  
       setModalStatus("None");
+      notify();
     }, 
-
+    
     onError:(err: any)=>{
       console.log("Error at adding content : ", err);
       alert("Error adding content. Please try again later.")
@@ -41,8 +48,8 @@ const CreateContentPopup = () => {
   })
   
   
-
-
+  
+  
   async function onClickHandler(){
     if(!typeRef.current){
       alert("Please select a content type.")
@@ -62,12 +69,13 @@ const CreateContentPopup = () => {
       description: descriptionRef.current?.value,
       link:linkRef.current?.value, 
     };
-
+    
     mutation.mutate(data);
   }
   
   return (
     mutation.isPending?<LoaderModal/>:<div className="fixed bg-white top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] border-2 min-h-96 w-80 rounded-lg z-40 flex flex-col items-center justify-center">
+     
       {<form className="flex flex-col items-center gap-2">
       <Input ref = {typeRef} placeholder="Content Type" required={true}/>
       <Input ref = {titleRef} placeholder="Title" required={true}/>
