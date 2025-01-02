@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Input } from "./Input";
-import { onChangeHandler } from "../utils";
+import { notify, onChangeHandler } from "../utils";
 import { Button } from "./Button";
 import { useQuery } from "@tanstack/react-query";
 import { useSetRecoilState } from "recoil";
@@ -36,10 +36,13 @@ const SigninPopup = () => {
         setAuthStatus(true);
         setModalStatus("None");
         queryClient.invalidateQueries({ queryKey: ["content"] });
+        notify("success", "Successfully logged in")
       }
     } catch (err: any) {
       console.log("error: ", err.response);
-      alert(err.response.data.message);
+      // alert(err.response.data.message);
+      setLoader(false); 
+      notify("error", err.response.data.message);
     }
   }
 

@@ -16,10 +16,14 @@ interface contentInterface {
   tags?:string[], 
 }
 const CreateContentPopup = () => {
-  const notify =  ()=>{
-    toast.success('Content Added Successfully!', {
+  const notify =  (status:string)=>{
+    if(status === "success")toast.success('Content Added Successfully!', {
       position: 'bottom-left',
     });
+
+    else if(status === "error")toast.error("Error adding content. Please try again later.", {
+      position: "bottom-left"
+    }); 
   };
   const queryClient = useQueryClient();
   const titleRef = useRef<HTMLInputElement>(null);
@@ -38,12 +42,13 @@ const CreateContentPopup = () => {
       console.log("Content added to brain!")
       queryClient.invalidateQueries({queryKey: ["content"]});  
       setModalStatus("None");
-      notify();
+      notify("success");
     }, 
     
     onError:(err: any)=>{
       console.log("Error at adding content : ", err);
-      alert("Error adding content. Please try again later.")
+      // alert("Error adding content. Please try again later.")
+      notify("error")
     }
   })
   

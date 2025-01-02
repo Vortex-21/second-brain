@@ -5,12 +5,24 @@ import { Button } from "./Button";
 import axios from "axios";
 import { ModalAtom } from "../recoil/atoms/ModalAtom";
 import { useSetRecoilState } from "recoil";
+import { toast } from "react-toastify";
 
 const SignupPopup = () => {
   const setModalStatus = useSetRecoilState(ModalAtom); 
   const usernameRef = useRef<HTMLInputElement>(null); 
   const passwordRef = useRef<HTMLInputElement>(null);
-  
+  const notify = (status: string, errorMessage?:string)=>{
+    if(status == "success"){
+      toast.success("Sign Up successful. Please Login!", {
+        position:"bottom-left"
+      })
+    }
+    else if(status == "error"){
+      toast.error(errorMessage, {
+        position:"bottom-left"
+      })
+    }
+  }
   const onSubmitHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     try {
@@ -20,13 +32,12 @@ const SignupPopup = () => {
       });
       console.log("response: ", response);
       if(response.status === 200){
-        alert("Sign Up successful. Please Login!")
+        // alert("Sign Up successful. Please Login!")
+        notify("success"); 
         setModalStatus("Signin")
 
       }
-      else {
-        alert(response.data.message)
-      }
+      
     } 
     catch (err: any) {
       // console.log("Error: ", err)
@@ -42,7 +53,8 @@ const SignupPopup = () => {
       }
       console.log("errorString: ",errorString)
       if(err.response){
-       alert(errorString)
+      //  alert(errorString)
+       notify("error", errorString); 
         // console.log("err.response: ", )
         // setModalStatus("Signin")
       }
