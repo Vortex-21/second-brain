@@ -23,6 +23,7 @@ export const AllNotes = () => {
   const setAuthStatus = useSetRecoilState(AuthAtom);
   useEffect(()=>{
     if(document.cookie){
+      // console.log(document.cookie); 
       setAuthStatus(true);
     }
   },[])

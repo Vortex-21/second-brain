@@ -2,6 +2,8 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 import React, { useEffect } from 'react'
 import { Card } from './Card';
 import axios from 'axios';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { AuthAtom } from '../recoil/atoms/AuthAtoms';
 type ContentTypes = "Document" | "Video" | "Tweet";
 interface CardInterface {
     content_type: ContentTypes;
@@ -9,15 +11,17 @@ interface CardInterface {
     description: string;
     tags?: string[];
     link?: string;
-    id: string;
+    _id: string;
   }
 export const ContentFilter = ({content_type}: {content_type: string}) => {
-  // useEffect(()=>{
-  //   if (content_type === "Tweet" && window.twttr?.widgets) {
-  //       window.twttr.widgets.load();
-  //   }
-  // }, [])
- 
+  const setAuthStatus = useSetRecoilState(AuthAtom); 
+  useEffect(()=>{
+    if(document.cookie){
+      // console.log(document.cookie); 
+      setAuthStatus(true);
+    }
+  },[])
+  const AuthStatus = useRecoilValue(AuthAtom); 
   async function getContent(){
     try{
         //make the request using axios 
@@ -32,7 +36,7 @@ export const ContentFilter = ({content_type}: {content_type: string}) => {
 
   const { data: filteredContent, isLoading, error } = useQuery({queryKey:[`${content_type.toLowerCase()}s`], queryFn:getContent});
   if(isLoading){
-    return <div>Loading your tweets.....</div>
+    return <div>Loading your {content_type.toLowerCase()}s.....</div>
   } 
   else if(error){
     console.log(`Error loading ${content_type.toLowerCase()}s: `, error);
@@ -40,14 +44,18 @@ export const ContentFilter = ({content_type}: {content_type: string}) => {
   }
   else{
       console.log("filtered content: ", filteredContent);
+      
       return (
         
            
-        <div id={`cards-${content_type.toLowerCase()}`} className="flex flex-wrap mt-8 gap-5 ">
+        AuthStatus?filteredContent?.content.length>0?<div id={`cards-${content_type.toLowerCase()}`} className="flex flex-wrap mt-8 gap-5 ">
             {filteredContent?.content.map((el: CardInterface, idx: number)=>{
-                return <Card key={idx} content_type={el.content_type} title={el.title} description={el.description} id={el.id} link={el.link}/>
+                return <Card key={idx} content_type={el.content_type} title={el.title} description={el.description} id={el._id} link={el.link}/>
             })}
-        </div>
+        </div>:<p>No Content to Load!</p>:<p>
+        Sign Up and see the magic begin!
+        Or what are you waiting for? Log in!
+      </p>
       )
   }
 }

@@ -17,13 +17,16 @@ import cors from "cors"
 // import "./types/express"
 dotenv.config();
 const app = express();
+
 app.use(cors(
   {
     origin: "http://localhost:5173", 
     credentials: true
   }
 ))
+
 app.use(cookieParser())
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 100,
@@ -295,8 +298,7 @@ app.post("/api/v1/brain/revoke", authenticate, async(req,res)=>{
 });
 
 app.get("/api/v1/content/:content_type/",authenticate, async(req, res)=>{
-  const userId = req.userId; 
-  // const contentType = req.params;
+  const userId = req.userId;
   const {content_type} = req.params; 
   try
   {

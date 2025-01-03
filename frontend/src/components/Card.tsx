@@ -8,11 +8,9 @@ import Tag from "./Tag";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { notify } from "../utils";
-// import { useRecoilTransaction_UNSTABLE } from "recoil";
-import {Tweet} from 'react-tweet'
+import { Tweet } from 'react-tweet'
 
-// import { ModalAtom } from "../recoil/atoms/ModalAtom";
-// import { useRecoilValue, useSetRecoilState } from "recoil";
+
 
 type ContentTypes = "Document" | "Video" | "Tweet";
 interface CardInterface {
@@ -35,19 +33,14 @@ export function Card({
   
 
   let vidLink = content_type==="Video"?`https://www.youtube.com/embed/${link?.split("?v=")[1]}`:"";
-  // let tweetLink = content_type === "Tweet"?`https://twitter.com/username/status/${
-  //   link?.split("status/")[1]
-  // }`:"";
+  
   let tweetId = content_type === "Tweet"?link?.split("status/")[1] : ""; 
   const icons: { [key in ContentTypes]: JSX.Element } = {
     Document: <DocumentIcon />,
     Video: <VideoIcon />,
     Tweet: <TweetIcon />,
   };
-  // console.log(
-  //   `raw url: ${link} tweetLink: ${tweetLink} id: ${link?.split("status/")[1]}`
-  // );
-  // const setModalStatus = useSetRecoilState(ModalAtom);
+  
   function shareLinkHandler() {
     if (link) {
       navigator.clipboard.writeText(link);
@@ -56,6 +49,7 @@ export function Card({
   }
   async function deleteCard() {
     // console.log("Deleting Card: ", title);
+    console.log("id: ", id); 
     await axios.delete(`http://localhost:3000/api/v1/content/${id}`, {
       withCredentials: true,
     });
@@ -63,13 +57,18 @@ export function Card({
 
   async function deleteClickHandler() {
     mutation.mutate();
+    
   }
   const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: deleteCard,
     onSuccess: () => {
       // alert("Card deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["content"] });
+      queryClient.invalidateQueries({ queryKey: ["tweets"] });
+      queryClient.invalidateQueries({ queryKey: ["videos"] });
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
       notify("success", "Card deleted successfully"); 
     },
     onError: () => {
@@ -106,7 +105,7 @@ export function Card({
         {content_type == "Video" && (
           <iframe
             className="w-full rounded-lg mt-2"
-            /*src="https://www.youtube.com/embed/VA7gIdsUZ0Y"*/ src={vidLink}
+            src={vidLink}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerPolicy="strict-origin-when-cross-origin"

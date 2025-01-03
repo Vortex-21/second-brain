@@ -8,7 +8,7 @@ import axios from "axios";
 import { AuthAtom } from "../recoil/atoms/AuthAtoms";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-// import { notify } from '../utils';
+
 export function TypeBox() {
   const navigate = useNavigate();
 
@@ -45,6 +45,11 @@ export function TypeBox() {
   return (
     <div className="mt-8 ml-8 text-xl text-gray-600">
       <SideBarItem
+        icon={<i className="mr-6 fa-solid fa-folder-open"></i>}
+        text="All Content"
+        onClickHandler={()=>{handleRedirect("all")}}
+      />
+      <SideBarItem
         icon={<i className="mr-6 fa-brands fa-twitter"></i>}
         text="Tweets"
         onClickHandler={()=>{handleRedirect("tweets")}}
@@ -59,11 +64,7 @@ export function TypeBox() {
         text="Documents"
         onClickHandler={()=>{handleRedirect("docs")}}
       />
-      <SideBarItem
-        icon={<i className="mr-5 fa-solid fa-link"></i>}
-        text="Links"
-      />
-      {/* <SideBarItem icon={<i className="mr-7 fa-solid fa-tag"></i>} text="Tags"/> */}
+      
       {AuthStatus === false && (
         <SideBarItem
           onClickHandler={() => {
@@ -89,11 +90,7 @@ export function TypeBox() {
           text="Log out"
         />
       )}
-      {/* <div className="flex flex-col gap-4">
-        <Button variant="secondary" text="Sign up" startIcon={<SignUpIcon/>} clickHandler={()=>{}}/>
-        <Button variant="secondary" text="Sign up" clickHandler={()=>{}}/>
-
-        </div> */}
+      
     </div>
   );
 }

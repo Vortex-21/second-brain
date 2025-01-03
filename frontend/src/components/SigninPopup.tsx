@@ -36,6 +36,9 @@ const SigninPopup = () => {
         setAuthStatus(true);
         setModalStatus("None");
         queryClient.invalidateQueries({ queryKey: ["content"] });
+        queryClient.invalidateQueries({ queryKey: ["tweets"] });
+        queryClient.invalidateQueries({ queryKey: ["videos"] });
+        queryClient.invalidateQueries({ queryKey: ["documents"] });
         notify("success", "Successfully logged in")
       }
     } catch (err: any) {
