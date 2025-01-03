@@ -3,6 +3,7 @@ export declare global{
         twttr?: {
             widgets: {
                 load:(element?:any)=>any;
+                destroy:(element?:any)=>any;
             }
         }
     }

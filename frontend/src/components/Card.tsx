@@ -8,6 +8,9 @@ import Tag from "./Tag";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { notify } from "../utils";
+// import { useRecoilTransaction_UNSTABLE } from "recoil";
+import {Tweet} from 'react-tweet'
+
 // import { ModalAtom } from "../recoil/atoms/ModalAtom";
 // import { useRecoilValue, useSetRecoilState } from "recoil";
 
@@ -29,18 +32,13 @@ export function Card({
   link,
   id,
 }: CardInterface) {
-  if (content_type === "Tweet") {
-    useEffect(() => {
-      if (content_type === "Tweet" && window.twttr?.widgets) {
-        window.twttr.widgets.load();
-      }
-    }, []);
-  }
+  
 
-  let vidLink = `https://www.youtube.com/embed/${link?.split("?v=")[1]}`;
-  let tweetLink = `https://twitter.com/username/status/${
-    link?.split("status/")[1]
-  }`;
+  let vidLink = content_type==="Video"?`https://www.youtube.com/embed/${link?.split("?v=")[1]}`:"";
+  // let tweetLink = content_type === "Tweet"?`https://twitter.com/username/status/${
+  //   link?.split("status/")[1]
+  // }`:"";
+  let tweetId = content_type === "Tweet"?link?.split("status/")[1] : ""; 
   const icons: { [key in ContentTypes]: JSX.Element } = {
     Document: <DocumentIcon />,
     Video: <VideoIcon />,
@@ -104,7 +102,7 @@ export function Card({
       </div>
 
       <div className="mt-4">{description}</div>
-      <div>
+      <div id="content_container" className="light">
         {content_type == "Video" && (
           <iframe
             className="w-full rounded-lg mt-2"
@@ -117,13 +115,7 @@ export function Card({
         )}
 
         {content_type == "Tweet" && (
-          <blockquote className="twitter-tweet">
-            <a
-              /*href="https://twitter.com/username/status/1869311029131596262"*/ href={
-                tweetLink
-              }
-            ></a>
-          </blockquote>
+          <Tweet id={tweetId? tweetId:"692527862369357824"} />
         )}
       </div>
 

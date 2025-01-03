@@ -198,6 +198,7 @@ app.get("/api/v1/content", authenticate, async (req, res) => {
 
 app.delete("/api/v1/content/:contentId", authenticate, async (req, res) => {
   const { contentId } = req.params;
+  console.log("contentId: ", contentId); 
   try {
     const deletedContent = await Content.findOneAndDelete({
       _id: contentId,
@@ -292,6 +293,27 @@ app.post("/api/v1/brain/revoke", authenticate, async(req,res)=>{
     return;
   }
 });
+
+app.get("/api/v1/content/:content_type/",authenticate, async(req, res)=>{
+  const userId = req.userId; 
+  // const contentType = req.params;
+  const {content_type} = req.params; 
+  try
+  {
+    const data = await Content.find({userId: userId, content_type:content_type}); 
+    res.status(200).json({
+      content: data
+    }); 
+    return;
+  }
+  catch(err: any){
+    console.log("Error at tweet route : ", err);
+    res.status(500).json({
+      message: "Internal Server Error"
+    })
+  }
+  
+})
 
 app.get("/home", (req, res) => {
   console.log("hit home !");
