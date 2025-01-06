@@ -2,6 +2,7 @@ import { ToastContainer } from "react-toastify";
 import { AllNotes } from "./AllNotes";
 import { Route, Routes } from "react-router-dom";
 import { ContentFilter} from "./ContentFilter";
+import SharedBrain from "./SharedBrain";
 
 export function ContentScreen() {
   return (
@@ -11,11 +12,12 @@ export function ContentScreen() {
       <Route path="/tweets" element={<ContentFilter content_type="Tweet"/>}/>
       <Route path="/videos" element={<ContentFilter content_type="Video"/>}/>
       <Route path="/docs" element={<ContentFilter content_type="Document"/>}/>
-      {/* <Route path="/videos" element={<Videos/>}/>
-      <Route path="/videos" element={<Docs/>}/>
-      <Route path="/links" element={<Links/>}/> */}
-       {/* <ToastContainer/>  */}
-      {/* <AllNotes /> */}
+      <Route path="/brain/:token" element={<SharedBrain/>}/>
+      <Route path="/brain/:token/all" element={<SharedBrain/>}/>
+      <Route path="/brain/:token/tweets" element={<SharedBrain content_type="Tweet"/>}/>
+      <Route path="/brain/:token/videos" element={<SharedBrain content_type="Video"/>}/>
+      <Route path="/brain/:token/documents" element={<SharedBrain content_type="Document"/>}/>
+     
 
     </Routes>
     </div>

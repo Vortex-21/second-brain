@@ -29,7 +29,7 @@ const SigninPopup = () => {
         },
         { withCredentials: true }
       );
-      console.log("response: ", response);
+      // console.log("response: ", response);
       if (response.status === 200) {
         // logged in successfully!
         setLoader(false);

@@ -7,13 +7,15 @@ import { SignoutIcon } from "../icons/SignoutIcon";
 import axios from "axios";
 import { AuthAtom } from "../recoil/atoms/AuthAtoms";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export function TypeBox() {
+export function TypeBox({sharedToken=""}: {sharedToken?:string}) {
   const navigate = useNavigate();
+  // const {token} = useParams(); 
 
   const handleRedirect = (content_type: string) => {
-    navigate(`/${content_type}`); 
+    if(sharedToken.length===0)navigate(`/${content_type}`); 
+    else navigate(`/brain/${sharedToken}/${content_type}`);
   };
 
   const setModalStatus = useSetRecoilState(ModalAtom);
@@ -62,7 +64,7 @@ export function TypeBox() {
       <SideBarItem
         icon={<i className="mr-8 fa-solid fa-file"></i>}
         text="Documents"
-        onClickHandler={()=>{handleRedirect("docs")}}
+        onClickHandler={()=>{handleRedirect("documents")}}
       />
       
       {AuthStatus === false && (

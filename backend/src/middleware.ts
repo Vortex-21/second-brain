@@ -4,6 +4,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 export function authenticate(req:Request, res:Response, next:NextFunction){
     const token = req.cookies["token"];
+    // console.log("cookies: ", req.cookies); 
     // console.log("token: ", token);
     if(!token || typeof token !== 'string'){
         res.status(401).json({

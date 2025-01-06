@@ -49,7 +49,7 @@ export function Card({
   }
   async function deleteCard() {
     // console.log("Deleting Card: ", title);
-    console.log("id: ", id); 
+    // console.log("id: ", id); 
     await axios.delete(`http://localhost:3000/api/v1/content/${id}`, {
       withCredentials: true,
     });

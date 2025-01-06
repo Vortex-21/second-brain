@@ -43,7 +43,7 @@ export const ContentFilter = ({content_type}: {content_type: string}) => {
     return <div>Error loading {content_type.toLowerCase()}s. Please try again later.</div>
   }
   else{
-      console.log("filtered content: ", filteredContent);
+      // console.log("filtered content: ", filteredContent);
       
       return (
         

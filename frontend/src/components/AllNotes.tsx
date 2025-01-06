@@ -61,11 +61,11 @@ export const AllNotes = () => {
     )
   }
   else{
-    console.log("data: ", data);
+    // console.log("data: ", data);
     return (
       AuthStatus ? 
       <div className="">
-        <div className="sticky top-0 bg-[#F9FBFC] p-2">
+        <div className="sticky top-0 bg-[#F9FBFC] p-2 z-20">
         <div className="flex  items-center h-20">
           <h1 className="text-4xl">All Notes</h1>
   

@@ -12,11 +12,23 @@ import crypto from "crypto";
 import { ShareableLinkModel } from "./models/ShareableLinks.model";
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import mongoose from "mongoose";
 
 
 // import "./types/express"
 dotenv.config();
 const app = express();
+
+interface SharedLinkInterface {
+  _id: mongoose.Types.ObjectId, 
+  token: string, 
+  userId: {[key: string]: string|mongoose.Types.ObjectId}, 
+  permissions:string[], 
+  createdAt: Date,
+  __v:any
+  
+}
+
 
 app.use(cors(
   {
@@ -201,7 +213,7 @@ app.get("/api/v1/content", authenticate, async (req, res) => {
 
 app.delete("/api/v1/content/:contentId", authenticate, async (req, res) => {
   const { contentId } = req.params;
-  console.log("contentId: ", contentId); 
+  // console.log("contentId: ", contentId); 
   try {
     const deletedContent = await Content.findOneAndDelete({
       _id: contentId,
@@ -240,7 +252,7 @@ app.post("/api/v1/brain/share", authenticate, async (req, res) => {
       userId: req.userId,
     });
     res.status(200).json({
-      "share-link": shareLink,
+      "shareLink": shareLink,
     });
   } catch (err) {
     console.log("Error at generate share-link route : ", err);
@@ -254,12 +266,18 @@ app.post("/api/v1/brain/share", authenticate, async (req, res) => {
 app.get("/api/v1/brain/:token", async (req,res) => {
   const {token} = req.params;
   try{
-    const share = await ShareableLinkModel.findOne({token : token});
+    const share: SharedLinkInterface|null = await ShareableLinkModel.findOne({token : token}).populate({
+      path:"userId", 
+      select:"username"
+    }).lean<SharedLinkInterface|null>();
+    // console.log("share: ", share); 
     if(share){
-      const userId = share.userId;
+      const userId = share.userId._id;
+      const username = share.userId.username; 
       const content = await Content.find({userId: userId});
       res.status(200).json({
-        content: content
+        content: content, 
+        sharedBy: username
       });
       return;
     }
@@ -318,7 +336,7 @@ app.get("/api/v1/content/:content_type/",authenticate, async(req, res)=>{
 })
 
 app.get("/home", (req, res) => {
-  console.log("hit home !");
+  // console.log("hit home !");
   res.json({
     message: "This is home route!",
   });

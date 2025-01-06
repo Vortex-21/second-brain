@@ -30,7 +30,7 @@ const SignupPopup = () => {
         username: usernameRef.current?.value,
         password: passwordRef.current?.value,
       });
-      console.log("response: ", response);
+      // console.log("response: ", response);
       if(response.status === 200){
         // alert("Sign Up successful. Please Login!")
         notify("success"); 
